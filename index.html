@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Elnea Kingdom — Family &amp; Relationship Trees</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="toolbar">
+  <div class="brand">
+    <span class="crown">&#9819;</span>
+    <span>Elnea Trees</span>
+  </div>
+
+  <div class="group">
+    <label>View</label>
+    <select id="viewMode">
+      <option value="family">Family tree</option>
+      <option value="social">Social web</option>
+      <option value="both">Both</option>
+    </select>
+  </div>
+
+  <div class="group">
+    <label>Show</label>
+    <button class="btn" data-preset="family">Family only</button>
+    <button class="btn" data-preset="social">Social only</button>
+    <button class="btn" data-preset="all">All</button>
+  </div>
+
+  <div class="spacer"></div>
+
+  <div class="group">
+    <button class="btn" id="btnFit">Fit</button>
+    <button class="btn" id="btnResetPos">Reset layout</button>
+    <button class="btn" id="btnExport">Export</button>
+    <button class="btn" id="btnImport">Import</button>
+    <input type="file" id="importFile" accept="application/json" hidden>
+  </div>
+</header>
+
+<div class="app">
+  <aside class="sidebar">
+    <section class="panel">
+      <div class="panel-head">
+        <h3>Trees</h3>
+        <button class="btn small" id="btnAddTree">+ Tree</button>
+      </div>
+      <select id="treeFilter"></select>
+      <ul id="treeList" class="tree-list"></ul>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h3>Characters</h3>
+        <button class="btn small primary" id="btnAddChar">+ Character</button>
+      </div>
+      <input id="search" class="input" placeholder="Search name / title / notes...">
+      <select id="occFilter"></select>
+      <ul id="charList" class="char-list"></ul>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head"><h3>Relationship layers</h3></div>
+      <div id="typeFilters" class="type-filters"></div>
+    </section>
+  </aside>
+
+  <main class="canvas-wrap">
+    <svg id="canvas"></svg>
+    <div id="hint" class="hint">Drag cards to arrange &middot; scroll to zoom &middot; double-click a card to edit</div>
+  </main>
+</div>
+
+<!-- Character editor -->
+<div class="modal-back" id="charModal" hidden>
+  <div class="modal">
+    <div class="modal-head">
+      <h2 id="charModalTitle">Character</h2>
+      <button class="icon-btn" data-close="charModal">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="tabs">
+        <button class="tab active" data-tab="details">Details</button>
+        <button class="tab" data-tab="gallery">Gallery</button>
+        <button class="tab" data-tab="rels">Relationships</button>
+      </div>
+
+      <div class="tab-pane" data-pane="details">
+        <div class="form-grid">
+          <label>Name<input id="f_name" class="input"></label>
+          <label>Title / epithet<input id="f_title" class="input" placeholder="e.g. Baker of Elnea"></label>
+          <label>Tree<select id="f_tree"></select></label>
+          <label>Gender
+            <select id="f_gender">
+              <option value="female">Female</option>
+              <option value="male">Male</option>
+              <option value="other">Other / unknown</option>
+            </select>
+          </label>
+          <label>Occupation<select id="f_occ"></select></label>
+          <label>Status
+            <select id="f_status">
+              <option value="alive">Alive</option>
+              <option value="deceased">Deceased</option>
+              <option value="unknown">Unknown</option>
+            </select>
+          </label>
+          <label>Born (year)<input id="f_born" class="input" placeholder="e.g. 412"></label>
+          <label>Died (year)<input id="f_died" class="input"></label>
+          <label class="wide">Notes<textarea id="f_notes" class="input" rows="4"></textarea></label>
+        </div>
+      </div>
+
+      <div class="tab-pane" data-pane="gallery" hidden>
+        <div class="gallery-tools">
+          <input type="file" id="f_images" accept="image/*" multiple hidden>
+          <button class="btn primary" id="btnPickImages">+ Add pictures</button>
+          <span class="muted">Images are resized to 512px and stored locally.</span>
+        </div>
+        <div id="galleryGrid" class="gallery-grid"></div>
+      </div>
+
+      <div class="tab-pane" data-pane="rels" hidden>
+        <div class="rel-add">
+          <select id="r_type"></select>
+          <select id="r_dir"></select>
+          <select id="r_target"></select>
+          <button class="btn primary" id="btnAddRel">Link</button>
+        </div>
+        <ul id="relList" class="rel-list"></ul>
+      </div>
+    </div>
+
+    <div class="modal-foot">
+      <button class="btn danger" id="btnDeleteChar">Delete character</button>
+      <div class="spacer"></div>
+      <button class="btn" data-close="charModal">Close</button>
+      <button class="btn primary" id="btnSaveChar">Save</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast" hidden></div>
+
+<script src="app.js"></script>
+</body>
+</html>
